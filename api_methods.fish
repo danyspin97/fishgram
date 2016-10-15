@@ -1,7 +1,7 @@
 #!usr/bin/fish
 
 # Send a message
-# Usage: sendMessage parameters
+# Usage: sendMessage argv
 # @param 1 chat_id
 # @param 2 text
 # @param 3 reply_markup
@@ -10,35 +10,43 @@
 # @param 6 disable_notification
 # @param 7 reply_to_message_id
 function sendMessage
-    set parameters $argv
-    set cont (math "count $parameters + 1" > /dev/null)
-    while math "$cont < 8" > /dev/null
-        set parameters[$cont] ""
+    set cont (math (count $argv) + 1)
+    while math "$cont < 9" > /dev/null
+        set argv[$cont] ""
         set cont (math "$cont + 1")
     end
-    set url $api_url"sendMessage?chat_id="$parameters[1]"&text="$parameters[2]"&reply_markup="$parameters[3]"&parse_mode="$parameters[4]"&disable_web_page_preview="$parameters[5]"&disable_notification="$parameters[6]"&reply_to_message_id="$parameters[7]
-    curlRequest $url .message_id
+    set url $api_url"sendMessage?chat_id="$argv[1]"&text="$argv[2]"&reply_markup="$argv[3]"&parse_mode="$argv[4]"&disable_web_page_preview="$argv[5]"&disable_notification="$argv[6]"&reply_to_message_id="$argv[7]
+    if math "$async == 0" > /dev/null
+        curlRequest $url .message_id
+    else
+        echo (curlRequestAsync $url "") > /dev/null
+    end
 end
 
 function getUpdates
-    set parameters $argv
-    set cont (count $parameters)
+    set cont (math (count $argv) + 1)
     while math "$cont < 4" > /dev/null
-        set parameters[$cont] ""
+        set argv[$cont] ""
         set cont (math "$cont + 1")
     end
-    set url $api_url"getUpdates?offset="$parameters[1]"&limit="$parameters[2]"&timeout="$parameters[3]
+    set url $api_url"getUpdates?offset="$argv[1]"&limit="$argv[2]"&timeout="$argv[3]
     curlRequest $url ""
 end
 
 # Request api methods using curl,
 # parse received json for error and return the result (based on api method)
 function curlRequest
-    set response (curl -s $argv[1] $async)
+    set response (curl -s $argv[1])
     if string match (echo $response | jq .ok) "false" > /dev/null
         echo $response | jq .desc > log.txt
-    else if string match $async ""
+    else
         echo $response | jq .result$argv[2]
     end
-    echo $argv
+end
+
+function curlRequestAsync
+    set response (curl -s $argv[1] &)
+    if string match (echo $response | jq .ok) "false" > /dev/null
+        echo $response | jq .desc > log.txt
+    end
 end
