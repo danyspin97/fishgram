@@ -1,7 +1,7 @@
 # Fishgram
 
 A wrapper for the Telegram Bot API written in fish. It uses getUpdates to get new updated received by the bot.
-It is in an realy development stage.
+It is in an early development stage.
 
 ## Features
 - Basic api methods
@@ -36,5 +36,5 @@ function processMessage
 end
 ```
 
-## [License](https://gitlab.com/danyspin97/fishgram/blob/master/LICENSE)
+## [License](https://github.com/DanySpin97/fishgram/blob/master/LICENSE)
 Fishgram is licensed under the MIT License.
