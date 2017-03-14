@@ -1,10 +1,6 @@
 #! /usr/bin/env fish
 
-source api_methods.fish
-source corebot.fish
-
 function processMessage
-    sendMessage "ciao"
 end
 
 function processCallbackQuery
@@ -18,4 +14,3 @@ end
 
 function processChoosenInlineResult
 end
-start_bot
