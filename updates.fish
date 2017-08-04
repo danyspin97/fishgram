@@ -6,5 +6,9 @@ function initMessage
 end
 
 function unsetMessage
-    unset text
+    set -e text
+end
+
+function initCallbackQuery
+    set -g chat_id (echo $argv | jq -r .message.chat.id)
 end

@@ -1,4 +1,4 @@
-#!usr/bin/fish
+#!usr/bin/env fish
 
 # Send a message
 # Usage: sendMessage argv
@@ -8,6 +8,7 @@
 # @param 4 disable_web_page_preview
 # @param 5 disable_notification
 # @param 6 reply_to_message_id
+# @return message_id of the message sent
 function sendMessage
     set cont (math (count $argv) + 1)
     while math "$cont < 8" > /dev/null
@@ -35,11 +36,11 @@ end
 # Request api methods using curl,
 # parse received json for error and return the result (based on api method)
 function curlRequest
-    set response (curl -s $argv[1])
+    set response (curl -K $DIR/curl.conf $argv[1])
     if string match (echo $response | jq .ok) "false" > /dev/null
         echo $response | jq .desc > log.txt
     else
-        echo $response | jq .result$argv[2]
+        echo $response | jq -c .result$argv[2]
     end
 end
 

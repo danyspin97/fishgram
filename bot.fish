@@ -1,8 +1,5 @@
 #! /usr/bin/env fish
 
-source api_methods.fish
-source corebot.fish
-
 function processMessage
 end
 
@@ -17,4 +14,3 @@ end
 
 function processChoosenInlineResult
 end
-start_bot

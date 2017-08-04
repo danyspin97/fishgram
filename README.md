@@ -15,24 +15,27 @@ It is in an early development stage.
 
 ## Installation
 
+In a new folder:
+
 ```shell
-git clone git@gitlab.com:danyspin97/fishgram.git
-cd fishgram; mv data_example.fish data.fish
+git submodule add git@github.com:danyspin97/fishgram.git
+cp fishgram/config.json .
 ```
 
-Put the token and settings in data.fish.
-The bot scripting goes in bot.fish.
+Put the token and settings in config.json.
 
 ## Example
 
 ### EchoBot
-In bot.fish:
 
 ```shell
+#!/usr/bin/env fish
+# bot.fish
+
+source fishgram/corebot.fish
+
 function processMessage
-    set chat_id (echo $argv | jq .from.id)
-    set text (echo $argv | jq .text)
-    sendMessage $chat_id $text
+    sendMessage $text
 end
 ```
 

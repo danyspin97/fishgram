@@ -1,17 +1,21 @@
 #! /usr/bin/env fish
 
-source api_methods.fish
-source updates.fish
+set -g DIR (dirname (status --current-filename))
+
+source $DIR/api_methods.fish
+source $DIR/bot.fish
+source $DIR/updates.fish
 
 function processUpdates
     # Send the update to the right type to be processed
-    switch (echo $argv | jq -f process_updates.jq)
+    switch (echo $argv | jq -f $DIR/process_updates.jq)
         case 1
             initMessage (echo $argv | jq -cr .message)
             processMessage
             unsetMessage
         case 2
-            processCallbackQuery (echo $argv | jq .callback_query) >/dev/null
+            initCallbackQuery (echo $argv | jq .callback_query)
+            processCallbackQuery
         case 3
             processEditedMessage (echo $argv | jq .edited_message) >/dev/null
         case 4
@@ -22,15 +26,15 @@ function processUpdates
 end
 
 function start_bot
-    ## debug
-    set token (jq -r '.token' ../config.json)
+
+    set token (jq -r '.token' config.json)
 
     if string match $token "token" >/dev/null
         echo "Token is empty, give a token to continue."
         exit 2
     end
 
-    set -g async (jq '.async' ../config.json)
+    set -g async (jq '.async' config.json)
 
     # Set url to call api methods
     set -g api_url "https://api.telegram.org/bot$token/"
