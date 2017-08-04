@@ -4,7 +4,6 @@ source api_methods.fish
 source corebot.fish
 
 function processMessage
-    sendMessage "ciao"
 end
 
 function processCallbackQuery

@@ -9,6 +9,7 @@ function processUpdates
         case 1
             initMessage (echo $argv | jq -cr .message)
             processMessage
+            unsetMessage
         case 2
             processCallbackQuery (echo $argv | jq .callback_query) >/dev/null
         case 3
